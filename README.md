@@ -1,6 +1,6 @@
 # Culture City MDT
 
-Angepasstes **ps-mdt** und **ps-dispatch** für den FiveM-Server Culture City (QBCore).
+**Culture City Edition** von **ps-mdt** und **ps-dispatch** für FiveM (QBCore).
 
 Autor: Robertbox28 · robertbox28.ch · Für Culture City
 
