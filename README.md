@@ -26,6 +26,34 @@ Autor: Robertbox28 · robertbox28.ch · Für Culture City
 - Telefonnummern aus LB Phone
 - Profile, Personalprotokolle und Dienstzeiten getrennt pro Behörde
 
+## Vorschau
+
+Die Bilder stammen aus der Vorschau mit Testdaten. Eine Live-Vorschau, in der man zwischen allen Behörden wechseln kann, liegt unter `Anleitung/vorschau/index.html` (im Browser öffnen).
+
+### Oberflächen
+
+| Polizei | Rettungsdienst |
+|---|---|
+| ![Polizei](docs/vorschau/polizei.jpg) | ![Rettungsdienst](docs/vorschau/rettungsdienst.jpg) |
+| **LSFD** | **Justiz** |
+| ![LSFD](docs/vorschau/lsfd.jpg) | ![Justiz](docs/vorschau/justiz.jpg) |
+| **Regierung** | **Taxi** |
+| ![Regierung](docs/vorschau/regierung.jpg) | ![Taxi](docs/vorschau/taxi.jpg) |
+| **East Customs** | |
+| ![East Customs](docs/vorschau/east-customs.jpg) | |
+
+### Funktionen
+
+| Besetzung | Dienstanweisungen |
+|---|---|
+| ![Besetzung](docs/vorschau/besetzung.jpg) | ![Dienstanweisungen](docs/vorschau/dienstanweisungen.jpg) |
+| **Gewerberegister (Regierung)** | **Werkstattaufträge (East Customs)** |
+| ![Gewerberegister](docs/vorschau/gewerberegister.jpg) | ![Werkstattaufträge](docs/vorschau/werkstattauftraege.jpg) |
+
+### Leitstelle
+
+![Meldungen der Leitstelle](docs/vorschau/leitstelle.jpg)
+
 ## Voraussetzungen
 
 - QBCore
