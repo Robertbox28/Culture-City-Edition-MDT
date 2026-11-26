@@ -19,7 +19,7 @@ Autor: Robertbox28 · robertbox28.ch · Für Culture City
 
 - Eigene Oberflächen mit Farben und Logos für jede Behörde
 - Komplett auf Deutsch
-- Eigene GTA-V-Karte mit Einsatzmarkierungen
+- Eigene GTA-V-Karte mit Roxwood und Cayo Perico, inklusive Einsatzmarkierungen
 - Besetzung: wer mit wem in welchem Fahrzeug arbeitet
 - Bussgeldkatalog von Culture City als Strafgesetzbuch (128 Tatbestände)
 - Eingebaute Dienstanweisungen für alle Behörden
