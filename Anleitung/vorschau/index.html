@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ps-mdt – Live-Vorschau (alle Behörden)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern.css">
+    <link rel="stylesheet" href="leaflet-min.css">
+    <!-- <script src="nui://game/ui/jquery.js" type="text/javascript"></script> -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script  src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js" data-auto-replace-svg="nest"></script>
+ 
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <!-- Markdown -->
+    
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/trumbowyg.min.js" integrity="sha512-YJgZG+6o3xSc0k5wv774GS+W1gx0vuSI/kr0E0UylL/Qg/noNspPtYwHPN9q6n59CTR/uhgXfjDXLTRI+uIryg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/fontsize/trumbowyg.fontsize.min.js" integrity="sha512-eFYo+lmyjqGLpIB5b2puc/HeJieqGVD+b8rviIck2DLUVuBP1ltRVjo9ccmOkZ3GfJxWqEehmoKnyqgQwxCR+g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/fontfamily/trumbowyg.fontfamily.min.js" integrity="sha512-oATdSCPRZu3qFFyxrZ66ma2QbQybLqpRqwLRp2IQEaIABnEHcs2qDf6UOVA/V5LhBvxFxKCNvyVb/yQfwDkFhQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/colors/trumbowyg.colors.min.js" integrity="sha512-SHpxBJFbCaHlqGpH13FqtSA+QQkQfdgwtpmcWedAXFCDxAYMgrqj9wbVfwgp9+HgIT6TdozNh2UlyWaXRkiurw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/indent/trumbowyg.indent.min.js" integrity="sha512-N89zRHLWXok+vH182YWrgGljMTqIw3lUfseand3N4OqzTtIXkObsRoq3l1vMBkp008c1fb+KGYU/DwJO783cug==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+
+<body>
+    <ul class="contextmenu"></ul>
+    <ul class="ccontextmenu"></ul>
+    <div id="draggedItem">
+    </div>
+    <img src="" class="gallery-image-enlarged">
+    <div class="callsign-container" style="display: none">
+        <div class="callsign-inner-container" style="display: none">
+            <div class="callsign-title">Rufzeichen eingeben</div>
+            <input type="text" maxlength="5" class="callsign-input" placeholder="6969">
+            <div class="callsign-buttons">
+                <div class="callsign-cancel">Abbrechen</div>
+                <div class="callsign-submit">Senden</div>
+            </div>
+        </div>
+    </div>
+    <div class="radio-container" style="display: none">
+        <div class="radio-inner-container" style="display: none">
+            <div class="radio-title">Funkkanal eingeben</div>
+            <input type="number" maxlength="3" class="radio-input" placeholder="0">
+            <div class="radio-buttons">
+                <div class="radio-cancel">Abbrechen</div>
+                <div class="radio-submit">Senden</div>
+            </div>
+        </div>
+    </div>
+    <div class="dispatch-attached-units">
+        <div class="dispatch-attached-units-container">
+            <div class="dispatch-attached-units-title" data-id="0">Angefügte Einheiten</div>
+            <div class="dispatch-attached-units-holder">
+            </div>
+        </div>
+    </div>
+
+    <div class="respond-calls" style="display:none;">
+        <div class="respond-calls-container" style="display:none;">
+            <div class="respond-calls-title">Anrufantwort</div>
+            <div class="respond-calls-responses">
+            </div>
+            <textarea class="respond-calls-input" type="text" id="respondcalls" name="respondcalls" placeholder="Was möchtest du antworten?"></textarea>
+        </div>
+    </div>
+
+    <div class="incidents-person-search">
+        <div class="incidents-person-search-container">
+            <div class="incidents-person-search-title">Personensuche</div>
+            <div class="incidents-person-search-name-title">Name</div>
+            <div style="width: 95%; margin: auto; border-bottom: 2px solid #2C537B;"><input class="incidents-person-search-name-input"></div>
+            <div class="incidents-person-search-holder">
+            </div>
+        </div>
+    </div>
+
+    <div class="convictions-known">
+        <div class="convictions-known-container">
+            <div class="convictions-known-title">Verurteilungen</div>
+            <div class="convictions-holder">
+            </div>
+        </div>
+    </div>
+
+    <div class="incidents-known">
+        <div class="incidents-known-container">
+            <div class="incidents-known-title">Bekannte Vorfälle</div>
+            <div class="profile-incidents-holder">
+            </div>
+        </div>
+    </div>
+    <div class="incidents-charges-table" style="display: none;">
+        <div class="incidents-charges-table-container">
+            <div class="incidents-charges-title-container">
+                <div class="incidents-charges-title">Anklagen</div>
+                <div class="incidents-charges-title-description">Suche nach Anklagen in der größeren Liste und klicke sie mit der linken Maustaste an, um sie dem Verdächtigen hinzuzufügen. Klicke mit der rechten Maustaste auf Anklagen in der größeren Liste, um sie zu entfernen.</div>
+            </div>
+            <div class="current-charges-container">
+                <div class="current-charges-inner-container">
+                    <div class="current-charges-title">Aktuelle Anklagen</div>
+                </div>
+                <div id="current-charges-holder">
+                    <div class="current-charges-tag">test</div>
+                </div>
+            </div>
+            <div class="offenses-search-area">
+                <input type="text" class="offenses-search" placeholder="Nach Anklagen suchen" id="offenses-search" name="offenses-search">
+            </div>
+            <div class="offenses-main-container"></div>
+        </div>
+    </div>
+    <div class="container-load">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="loader"></div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item">Übersicht</div>
+                <div class="nav-item">Profile</div>
+                <div class="nav-item incidents-nav-item">Vorfälle</div>
+                <div class="nav-item">Berichte</div>
+                <div class="nav-item map-nav-item">Karte</div>
+                <div class="nav-item bolo-nav-item">BOLOs</div>
+                <div class="nav-item">Besetzung</div>
+                <div class="nav-item">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item">Kameras</div>
+                <div class="nav-item">Personalprotokolle</div>
+            </div>
+        </div>
+    </div>
+    <div class="dashboard-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item active-nav" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+                <div class="dispatch-comms-container">
+                    <div style="display: flex;" class="reports-search-title-holder">
+                        <div class="reports-search-title dispatch-title-ofsomesort">Dispatch</div>
+                        <div class="dispatch-comms-refresh">Aktualisieren</div>
+                    </div>
+                    <div class="dispatch-items"> </div>
+                    <textarea class="dispatch-input" type="text" id="dispatchmsg" name="dispatchmsg" placeholder="Nachricht #dispatch"></textarea>
+                </div>
+                <div class="reports-container" id="home-reports-container" style="display:none">
+                    <div style="display: flex;" class="reports-search-title-holder">
+                        <div class="reports-search-title">Berichte</div>
+                        <div class="reports-search-refresh">Aktualisieren</div>
+                    </div>
+                    <div class="reports-items">
+                    </div>
+                </div>
+                <div class="warrants-container" id="home-warrants-container">
+                    <div class="warrants-title"> <span class="fas fa-search"></span> Haftbefehle</div>
+                    <div class="warrants-items">
+
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column;">
+                <div class="quotes-container">
+                    <div class="quote-title"><span style="color: #caa95d;">Zitat</span> des Tages</div>
+                    <div class="quote"><span class="quote-span"></span></div>
+                </div>
+                <div class="bulletin-container">
+                    <div style="display: flex; align-items: center;">
+                        <div class="bulletin-title">Pinnwand</div>
+                        <div class="bulletin-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="bulletin-items-continer"> </div>
+                </div>
+            </div>
+            <div class="dispatch-container">
+                <div class="dispatch-title"><span class="fas fa-search"></span> Einsatzleitung</div>
+                <div style="display: flex; align-items: center;">
+                    <div class="active-unit-title">Aktive Einheiten</div>
+                    <div class="active-unit-count" id="police-count" title="LSPD">0</div>
+                    <div class="active-unit-count" id="bcso-count" title="BCSO / LSSD">0</div> 
+                    <div class="active-unit-count" id="sasp-count" title="SASP / SAST / SAPR">0</div>
+                    <div class="active-unit-count" id="ems-count" title="EMS">0</div>
+                    <div class="active-unit-count" id="doj-count" title="DOJ / DOC">0</div>
+                    <div class="active-unit-count" id="fire-count" title="LSFD">0</div>
+                    <div class="active-unit-count" id="gov-count" title="Regierung">0</div>
+                    <div class="active-unit-count" id="taxi-count" title="Taxi" style="display:none">0</div>
+                    <div class="active-unit-count" id="mech-count" title="Mechaniker" style="display:none">0</div>
+                </div>
+                <div class="active-unit-list">
+                </div>
+                <div class="calls-title">Letzte Einsätze</div>
+                <div class="active-calls-list">
+                    <div class="active-calls-item">
+                        <div class="active-call-inner-container">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="profile-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item active-nav" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-title"> <span class="fas fa-search"></span> Profile</div>
+                <div class="profile-search-input"><input id="profile-search-input" type="text"
+                        placeholder="Person suchen..."></div>
+                <div class="profile-items">
+                </div>
+            </div>
+            <div class="manage-profile-container">
+                <div class="manage-profile-title">Profil verwalten</div>
+                <div style="display: flex;">
+                    <div class="manage-profile-editing-title">Du bearbeitest gerade ...</div>
+                    <div class="manage-profile-save">Speichern</div>
+                </div>
+                <div class="manage-profile-active-warrant">AKTIVER HAFTBEFEHL</div>
+                <div class="manage-profile-info-container">
+                    <img src="img/male.png" class="manage-profile-pic" onerror="this.src='img/not-found.webp'">
+                    <div class="manage-profile-info-inner-container">
+                        <div class="manage-profile-citizenid">Bürger ID</div>
+                        <div><span class="fas fa-address-card manage-cid-pic"></span><input type="text" readonly class="manage-profile-citizenid-input"></div>
+                        <div class="line"></div>
+                        <div class="manage-profile-name">Vorname</div>
+                        <div><span class="fas fa-user manage-cid-pic"></span><input type="text" readonly class="manage-profile-name-input manage-profile-name-input-1"></div>
+                        <div class="line"></div>
+                        <div class="manage-profile-name">Nachname</div>
+                        <div><span class="fas fa-user manage-cid-pic"></span><input type="text" readonly class="manage-profile-name-input manage-profile-name-input-2"></div>
+                        <div class="line"></div>
+                        <div class="manage-profile-dob rec-only">Geburtsdatum</div>
+                        <div class="rec-only"><span class="far fa-calendar-alt manage-cid-pic"></span><input type="text" readonly class="manage-profile-dob-input"></div>
+                        <div class="line rec-only"></div>
+                        <div class="manage-profile-fingerprint rec-only">Fingerabdruck</div>
+                        <div class="rec-only"><span class="fas fa-fingerprint manage-cid-pic"></span><input type="text" class="manage-profile-fingerprint-input"></div>
+                        <div class="line rec-only"></div>
+                        <div class="manage-profile-phonenumber">Telefonnummer</div>
+                        <div><span class="fas fa-phone-volume manage-cid-pic"></span><input type="text" readonly class="manage-profile-phonenumber-input"></div>
+                        <div class="line"></div>
+                        <div class="manage-profile-job">Beruf</div>
+                        <div><span class="fas fa-briefcase manage-cid-pic"></span><input type="text" readonly class="manage-profile-job-input"></div>
+                        <div class="line"></div>
+                        <div class="manage-profile-apartment rec-only">Wohnung</div>
+                        <div class="rec-only"><span class="fas fa-building manage-cid-pic"></span><input type="text" readonly class="manage-profile-apartment-input"></div>
+                        <div class="line rec-only"></div>
+                        <div class="manage-profile-url">Profilbild URL</div>
+                        <div><span class="fas fa-images manage-cid-pic"></span><input type="text" class="manage-profile-url-input"></div>
+                        <div class="line" style="margin-bottom: 0px;"></div>
+                    </div>
+                </div>
+                <textarea class="manage-profile-info" placeholder="Hier Benutzerinformationen einfügen..." disabled></textarea>
+            </div>
+            <div class="manage-profile-right-container">
+                <div class="manage-profile-licenses-container display_hidden">
+                    <div class="license-title">Lizenzen <span class="licenses-amount"></span></div>
+                    <div class="licenses-holder"></div>
+                </div>
+                <div class="manage-profile-vehs-container display_hidden">
+                    <div class="vehs-title">Fahrzeuge</div>
+                    <div class="vehs-holder"></div>
+                </div>
+                <div class="manage-profile-tags-container">
+                    <div style="display: flex; align-items: center;">
+                        <div class="tags-title">Tags</div>
+                        <div class="tags-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="tags-holder"></div>
+                </div>
+                <div class="manage-profile-houses-container display_hidden">
+                    <div class="houses-title">Immobilien</div>
+                    <div class="houses-holder"></div>
+                </div>
+                <div class="manage-profile-gallery-container">
+                    <div style="display: flex; align-items: center;">
+                        <div class="gallery-title">Galerie</div>
+                        <div class="gallery-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="gallery-upload-input"><input id="gallery-upload-input" placeholder="URL hochladen...">
+                    </div>
+                    <div class="gallery-inner-container"></div>
+                </div>
+                <div class="convictions-title rec-only"><span class="fas fa-eye"></span> Vorstrafen anzeigen</div>
+                <div class="profile-incidents-title rec-only"><span class="fas fa-eye"></span> Vorfälle anzeigen</div>
+            </div>
+        </div>
+    </div>
+    <div class="incidents-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item active-nav" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="incidents-container">
+                <div style="display: flex;" class="reports-search-title-holder">
+                    <div class="incidents-title"> <span class="fas fa-search"></span> Vorfälle</div>
+                    <div class="incidents-search-refresh">Aktualisieren</div>
+                </div>
+                <div class="incidents-search-input"><input id="incidents-search-input" placeholder="Vorfall suchen...">
+                </div>
+                <div class="modify-charges-label"><span class="fas fa-solid fa-info"></span> Klicke mit der rechten Maustaste unten, um den Vorfall zu löschen.</div>
+                <div class="incidents-items">
+                </div>
+            </div>
+            <div class="manage-incidents-container">
+                <div style="display: flex;" class="manage-incidents-title-holder">
+                    <div class="manage-incidents-title">Vorfall bearbeiten</div>
+                        <div class="manage-incidents-create"> <span class="fas fa-plus" style="margin-top: 3.5px;"></span>
+                    </div>
+                    <!-- <div class="manage-incidents-save"><span class="fas fa-save" style="margin-top: 3.5px;"></span></div> -->
+                </div>
+                <div class="manage-incidents-editing-title" data-id=0>Du erstellst gerade einen neuen Vorfall</div>
+                <div class="manage-incidents-title-tag">Titel</div>
+                <div class="manage-incidents-title-input"><span class="fas fa-tags"></span> <input placeholder="Titel hier einfügen..." class="manage-incidents-title-input" id="manage-incidents-title-input"></div>
+                <textarea class="manage-incidents-reports-content"
+                    placeholder="Inhalte des Vorfalls hier eingeben..."></textarea>
+                <div class="manage-incidents-tags-container">
+                    <div style="display: flex; align-items: center; width: 95%;">
+                        <div class="manage-incidents-tags-title">Tags</div>
+                        <div class="manage-incidents-tags-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="manage-incidents-tags-holder">
+                    </div>
+                </div>
+                <div class="manage-incidents-evidence-container">
+                    <div style="display: flex; align-items: center; width: 95%;">
+                        <div class="manage-incidents-evidence-title">Beweise</div>
+                        <div class="manage-incidents-evidence-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="incidents-upload-input"><input id="incidents-upload-input" placeholder="URL hochladen...">
+                    </div>
+                    <div class="manage-incidents-evidence-holder">
+                    </div>
+                </div>
+            </div>
+            <div class="associated-incidents-container">
+                <div class="associated-incidents-title">Zugehörige</div>
+                <div class="manage-incidents-officers-container">
+                    <div style="display: flex; align-items: center; width: 95%;">
+                        <div class="manage-incidents-officers-title">Beteiligte Beamte</div>
+                        <div class="manage-incidents-officers-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="manage-incidents-officers-holder">
+
+                    </div>
+                </div>
+                <div class="manage-incidents-civilians-container">
+                    <div style="display: flex; align-items: center; width: 95%;">
+                        <div class="manage-incidents-civilians-title">Beteiligte Zivilisten</div>
+                        <div class="manage-incidents-civilians-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="manage-incidents-civilians-holder">
+
+                    </div>
+                </div>
+                <div class="associated-incidents-tags-container">
+                    <div style="display: flex; align-items: center; width: 95%;">
+                        <div class="associated-incidents-tags-title">Beteiligte Kriminelle</div>
+                        <div class="associated-incidents-tags-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="associated-incidents-tags-holder">
+                    </div>
+                </div>
+                <div class="incidents-ghost-holder">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="reports-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item  active-nav" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="reports-container">
+
+                <div style="display: flex;" class="reports-search-title-holder">
+                    <div class="reports-search-title"> <span class="fas fa-search"></span> Berichte</div>
+                    <div class="reports-search-refresh">Aktualisieren</div>
+                </div>
+                <div class="reports-search-input"><input id="reports-search-input" placeholder="Bericht suchen..."> </div>
+                <div class="modify-charges-label"><span class="fas fa-solid fa-info"></span> Klicke mit der rechten Maustaste unten, um den Bericht zu löschen.</div>
+                <div class="reports-items">
+                </div>
+            </div>
+            <div class="manage-reports-container">
+                <div style="display: flex;" class="manage-reports-title-holder">
+                    <div class="manage-reports-title">Bericht bearbeiten</div>
+                    <div class="manage-reports-new">Neu</div>
+                    <div class="manage-reports-save">Speichern</div>
+                </div>
+                <div class="manage-reports-editing-title" data-id=0>Du erstellst gerade einen neuen Bericht</div>
+                <div class="manage-reports-input-tag">Titel</div>
+                <div class="manage-reports-input-title">
+                    <span class="fas fa-tags"></span>
+                    <input placeholder="Titel hier einfügen..." id="reporttitle" class="manage-reports-input-title">
+                </div>
+
+                <div class="manage-reports-input-tag">Typ</div>
+                <div class="manage-reports-input-type"><span class="fas fa-folder"></span> <input placeholder="Berichtstyp hier einfügen..." id="reporttype" class="manage-reports-input-type"></div>
+
+                <textarea class="manage-reports-reports-content" id="reportdetail" placeholder="Berichtsdetails hier einfügen..."></textarea>
+            </div>
+
+            <div class="manage-reports-right-container">
+                <div class="manage-reports-tags-container">
+                    <div style="display: flex; align-items: center;">
+                        <div class="manage-reports-title-tag">Tags</div>
+                        <div class="manage-reports-tags-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="manage-reports-tags-holder"></div>
+                </div>
+                <div class="reports-officers-tags-container">
+                    <div style="display: flex; align-items: center;">
+                        <div class="tags-title" id="reports-officers-involved-tag-title">Beteiligte Beamte</div>
+                        <div class="reports-officers-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="reports-officers-tags-holder"></div>
+                </div>
+                <div class="reports-civilians-tags-container">
+                    <div style="display: flex; align-items: center;">
+                        <div class="tags-title">Beteiligte Zivilisten</div>
+                        <div class="reports-civilians-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="reports-civilians-tags-holder"></div>
+                </div>
+                <div class="manage-reports-gallery-container">
+                    <div style="display: flex; align-items: center;">
+                        <div class="gallery-title">Galerie</div>
+                        <div class="reports-gallery-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="reports-gallery-upload-input"><input id="reports-gallery-upload-input" placeholder="URL hochladen...">
+                    </div>
+                    <div class="reports-gallery-inner-container"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="bolos-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item active-nav" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="bolos-container">
+
+                <div style="display: flex;" class="bolos-search-title-holder">
+                    <div class="bolos-search-title"> <span class="fas fa-search"></span> BOLOs</div>
+                    <div class="bolos-search-refresh">Aktualisieren</div>
+                </div>
+                <div class="bolos-search-input"><input id="bolos-search-input" placeholder="BOLO suchen..."> </div>
+                <div class="bolos-items">
+                </div>
+            </div>
+            <div class="manage-bolos-container">
+                <div style="display: flex;" class="manage-bolos-title-holder">
+                    <div class="manage-bolos-title">BOLO verwalten</div>
+                    <div class="manage-bolos-new">Neu</div>
+                    <div class="manage-bolos-save">Speichern</div>
+                </div>
+                <div class="manage-bolos-editing-title" data-id=0>Du erstellst gerade einen neuen BOLO</div>
+                <div class="manage-bolos-input-tag bolotitle-title">Titel</div>
+                <div class="manage-bolos-input-title">
+                    <span class="fas fa-tags"></span>
+                    <input placeholder="Titel hier einfügen..." id="bolotitle" class="manage-bolos-input-title">
+                </div>
+
+                <div class="manage-bolos-input-tag boloplate-title">Kennzeichen</div>
+                <div class="manage-bolos-input-plate"><span class="fas fa-address-card"></span> <input placeholder="Kennzeichen hier einfügen..." id="boloplate" class="manage-bolos-input-plate"></div>
+
+                <div class="manage-bolos-input-tag boloowner-title">Besitzer</div>
+                <div class="manage-bolos-input-owner"><span class="fas fa-bookmark"></span> <input placeholder="Fahrzeugbesitzer hier einfügen..." id="boloowner" class="manage-bolos-input-owner"></div>
+
+                <div class="manage-bolos-input-tag boloindividual-title">Person</div>
+                <div class="manage-bolos-input-individual"><span class="fas fa-user"></span> <input placeholder="Person hier einfügen..." id="boloindividual" class="manage-bolos-input-individual"></div>
+
+                <textarea class="manage-bolos-reports-content" id="bolodetail" placeholder="BOLO-Details hier einfügen..."></textarea>
+            </div>
+
+            <div class="manage-bolos-right-container">
+                <div class="manage-bolos-tags-container">
+                    <div style="display: flex; align-items: center;">
+                        <div class="manage-bolos-title-tag">Tags</div>
+                        <div class="manage-bolos-tags-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="manage-bolos-tags-holder"></div>
+                </div>
+                <div class="manage-officers-tags-container">
+                    <div style="display: flex; align-items: center;">
+                        <div class="tags-title" id="bolos-officers-involved-tag-title">Beteiligte Beamte</div>
+                        <div class="officers-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="manage-officers-tags-holder"></div>
+                </div>
+                <div class="manage-bolos-gallery-container">
+                    <div style="display: flex; align-items: center;">
+                        <div class="gallery-title">Galerie</div>
+                        <div class="bolo-gallery-add-btn fas fa-plus"></div>
+                    </div>
+                    <div class="bolo-gallery-upload-input"><input id="bolo-gallery-upload-input" placeholder="URL hochladen...">
+                    </div>
+                    <div class="bolo-gallery-inner-container"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="penalcode-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item active-nav" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="assign-wrap">
+                <!-- Einteilung: alle Einheiten -->
+                <div class="assign-col assign-list-col">
+                    <div class="assign-head">
+                        <div class="assign-title"><span class="fas fa-users"></span> Einteilung</div>
+                        <div class="assign-btn assign-refresh" title="Aktualisieren"><span class="fas fa-rotate"></span></div>
+                        <div class="assign-btn assign-roster-toggle" title="Dienstliste (Tabelle) anzeigen"><span class="fas fa-table-list"></span></div>
+                    </div>
+                    <div class="assign-summary"></div>
+                    <div class="assign-list"></div>
+                    <div class="assign-btn assign-clear assign-edit-only">Einteilung zurücksetzen</div>
+                </div>
+
+                <!-- Einheit bearbeiten -->
+                <div class="assign-col assign-edit-col">
+                    <div class="assign-head">
+                        <div class="assign-title">Einheit bearbeiten</div>
+                        <div class="assign-btn assign-new assign-edit-only">Neu</div>
+                        <div class="assign-btn assign-save assign-edit-only">Speichern</div>
+                    </div>
+                    <div class="assign-editing" data-id="0">Neue Einheit</div>
+                    <div class="assign-readonly-hint">Du kannst die Einteilung nur ansehen.</div>
+
+                    <label class="assign-label">Funkrufname / Einheit</label>
+                    <div class="assign-input"><span class="fas fa-tower-broadcast"></span><input id="assign-unit" maxlength="50" placeholder="z.B. Adam-12, Engine 7-1"></div>
+
+                    <label class="assign-label">Fahrzeug</label>
+                    <div class="assign-input"><span class="fas fa-car-side"></span><input id="assign-vehicle" maxlength="50" list="assign-vehicle-list" placeholder="Fahrzeug wählen oder eingeben"></div>
+                    <datalist id="assign-vehicle-list"></datalist>
+
+                    <label class="assign-label">Kennzeichen</label>
+                    <div class="assign-input"><span class="fas fa-id-card"></span><input id="assign-plate" maxlength="12" placeholder="z.B. LSPD 012"></div>
+                    <div class="assign-btn assign-current-veh assign-edit-only"><span class="fas fa-car"></span> Mein aktuelles Fahrzeug übernehmen</div>
+
+                    <label class="assign-label">Status</label>
+                    <div class="assign-status-row">
+                        <div class="assign-status-opt" data-status="available">Verfügbar</div>
+                        <div class="assign-status-opt" data-status="busy">Im Einsatz</div>
+                        <div class="assign-status-opt" data-status="pause">Pause</div>
+                        <div class="assign-status-opt" data-status="off">Ausser Dienst</div>
+                    </div>
+
+                    <label class="assign-label">Besatzung <span class="assign-member-count"></span></label>
+                    <div class="assign-members"></div>
+                    <div class="assign-hint assign-edit-only">Rechts auf einen Namen klicken, um ihn hinzuzufügen. Auf einen Namen hier klicken, um ihn zu entfernen.</div>
+
+                    <label class="assign-label">Notiz</label>
+                    <textarea id="assign-note" maxlength="255" placeholder="z.B. Bereich Paleto, Ausbildungsfahrt ..."></textarea>
+
+                    <div class="assign-btn assign-delete assign-edit-only">Einheit löschen</div>
+                </div>
+
+                <!-- Personal -->
+                <div class="assign-col assign-people-col">
+                    <div class="assign-head">
+                        <div class="assign-title">Personal</div>
+                    </div>
+                    <div class="assign-filter">
+                        <div class="assign-filter-opt active" data-filter="free">Nicht eingeteilt</div>
+                        <div class="assign-filter-opt" data-filter="all">Alle</div>
+                    </div>
+                    <div class="assign-people"></div>
+                </div>
+            </div>
+            <div class="penalcode-embed roster-embed" style="border:none; display:none;">
+                <div class="assign-btn assign-roster-back"><span class="fas fa-arrow-left"></span> Zurück zur Einteilung</div>
+                <iframe class="roster-iframe" src="" target="_blank"></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="sop-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item active-nav" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="sop-wrap">
+                <div class="sop-side">
+                    <div class="sop-side-title"><span class="fas fa-book"></span> Dienstanweisungen</div>
+                    <div class="sop-search"><span class="fas fa-magnifying-glass"></span><input id="sop-search" placeholder="Suchen, z.B. Festnahme, 10-99 ..."></div>
+                    <div class="sop-chapters"></div>
+                    <div class="sop-external-btn"><span class="fas fa-up-right-from-square"></span> Externe Dienstanweisung</div>
+                </div>
+                <div class="sop-content"></div>
+            </div>
+            <div class="sop-embed sop-external" style="border:none; display:none;">
+                <div class="sop-back"><span class="fas fa-arrow-left"></span> Zurück</div>
+                <iframe class="sop-iframe" src="" target="_blank"></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="dmv-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item active-nav" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="dmv-container">
+                <div class="dmv-search-title"> <span class="fas fa-search"></span> Fahrzeuge</div>
+                <div class="dmv-search-input"><input id="dmv-search-input" placeholder="Fahrzeuge suchen..."> </div>
+                <div class="dmv-items">
+
+                </div>
+            </div>
+            <div class="vehicle-information-container">
+                <div style="display: flex;" class="vehicle-information-title-holder" data-dbid=0>
+                    <div class="vehicle-information-title">Fahrzeuginformationen</div>
+                    <div class="vehicle-information-save">Speichern</div>
+                </div>
+                <div class="vehicle-info-stuff">
+                    <img src="img/not-found.webp" class="vehicle-info-image" onerror="this.src='img/not-found.webp'">
+                    <div class="vehicle-info-inner-container">
+                        <div class="vehicle-info-plate">Kennzeichen</div>
+                        <div><span class="fas fa-address-card vehicle-info-icon"></span><input type="text" readonly class="vehicle-info-plate-input"></div>
+                        <div class="vehicle-info-line"></div>
+                        <div class="vehicle-info-owner">Besitzer</div>
+                        <div><span class="fas fa-bookmark vehicle-info-icon"></span><input type="text" readonly class="vehicle-info-owner-input"></div>
+                        <div class="vehicle-info-line"></div>
+                        <div class="vehicle-info-class">Klasse</div>
+                        <div><span class="fas fa-folder vehicle-info-icon"></span><input type="text" readonly class="vehicle-info-class-input"></div>
+                        <div class="vehicle-info-line"></div>
+                        <div class="vehicle-info-model">Marke/Modell</div>
+                        <div><span class="fas fa-car vehicle-info-icon"></span><input type="text" readonly class="vehicle-info-model-input"></div>
+                        <div class="vehicle-info-line"></div>
+                        <div class="vehicle-info-imageurl">Bild URL</div>
+                        <div><span class="fas fa-images vehicle-info-icon"></span><input type="text" class="vehicle-info-imageurl-input"></div>
+                        <div class="vehicle-info-line" style="margin-bottom: 0px;"></div>
+                        <div class="vehicle-info-points">Fahrzeugpunkte: <span id="vehiclePointsSliderValue">0</span></div>
+                        <div><span class="fa-solid fa-scale-balanced vehicle-info-icon"></span><input id="vehiclePointsSlider" type="range" value="0" min="0" max="30" class="vehicle-info-points-input"/></div>
+                    </div>
+                </div>
+                <div class="vehicle-info-tags-container">
+                    <div class="vehicle-info-tags-title">Bekannte Informationen</div>
+                    <div class="vehicle-info-tags-holder">
+                        <div class="vehicle-tags">
+                            <div class="vehicle-tag red-tag">Lackierung</div>
+                            <div class="vehicle-tag red-tag">Einziehung</div>
+                            <div class="vehicle-tag red-tag">BOLO</div>
+                            <div class="vehicle-tag red-tag">Code 5</div>
+                            <div class="vehicle-tag red-tag">Gestohlen</div>
+                        </div>
+                    </div>
+                </div>
+                <textarea class="vehicle-info-content" placeholder="Fahrzeugnotizen hier platzieren..."></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="weapons-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item active-nav" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="weapons-container">
+                <div class="weapons-search-title"> <span class="fas fa-search"></span> Waffen</div>
+                <div class="weapons-search-input"><input id="weapons-search-input" placeholder="Waffen suchen..."> </div>
+                <div class="weapons-items">
+
+                </div>
+            </div>
+            <div class="weapon-information-container">
+                <div style="display: flex;" class="weapon-information-title-holder" data-dbid=0>
+                    <div class="weapon-information-title">Waffeninformationen</div>
+                    <div class="weapon-information-new">Neu</div>
+                    <div class="weapon-information-save">Speichern</div>
+                </div>
+                <div class="weapon-info-stuff">
+                    <img src="img/weapons.webp" class="weapon-info-image" onerror="this.src='img/not-found.webp'">
+                    <div class="weapon-info-inner-container">
+                        <div class="weapon-info-serial">Seriennummer</div>
+                        <div><span class="fas fa-address-card weapon-info-icon"></span><input type="text" class="weapon-info-serial-input" ></div>
+                        <div class="weapon-info-line"></div>
+                        <div class="vehicle-info-owner">Registriert auf</div>
+                        <div><span class="fas fa-bookmark weapon-info-icon"></span><input type="text" class="weapon-info-owner-input"></div>
+                        <div class="weapon-info-line"></div>
+                        <div class="weapon-info-model">Modell</div>
+                        <div><span class="fa-solid fa-gun weapon-info-icon"></span><input type="text" class="weapon-info-model-input" ></div>
+                        <div class="weapon-info-line"></div>
+                        <div class="weapon-info-class">Klasse</div>
+                        <div><span class="fas fa-folder weapon-info-icon"></span><input type="text" class="weapon-info-class-input"></div>
+                        <div class="weapon-info-line"></div>
+                        <div class="vehicle-info-imageurl">Bild URL</div>
+                        <div><span class="fas fa-images weapon-info-icon"></span><input type="text" class="weapon-info-imageurl-input"></div>
+                        <div class="weapon-info-line" style="margin-bottom: 0px;"></div>
+                    </div>
+                </div>
+                <textarea class="weapon-info-content" placeholder="Waffennotizen hier platzieren..."></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="stafflogs-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item active-nav" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="stafflogs-container">
+                <div class="stafflogs-box-title">Protokolle</div>
+                <div class="stafflogs-box"></div>
+            </div>
+            <div class="leaderboard-container">
+                <div class="leaderboard-title">Dienstzeiten</div>
+                <div class="leaderboard-box">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cams-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item active-nav" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="cams-container">
+                <div class="cams-item">
+                                
+                    <div class="cams-items" id="1"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Pacific Bank CAM 1</div>
+                    <div class="cams-items" id="2"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Pacific Bank CAM 2</div>
+                    <div class="cams-items" id="3"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Pacific Bank CAM 3</div>
+                    <div class="cams-items" id="4"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Limited Ltd Grove St.</div>
+                    <div class="cams-items" id="5"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Rob's Liqour Prosperity St.</div>
+                    <div class="cams-items" id="6"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Rob's Liqour San Andreas Ave.</div>
+                    <div class="cams-items" id="7"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Limited Ltd Ginger St.</div>
+                    <div class="cams-items" id="8"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>24/7 Supermarkt Innocence Blvd.</div>
+                    <div class="cams-items" id="9"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Rob's Liqour El Rancho Blvd.</div>
+                    <div class="cams-items" id="10"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Limited Ltd West Mirror Drive</div>
+                    <div class="cams-items" id="11"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>24/7 Supermarkt Clinton Ave</div>
+                    <div class="cams-items" id="12"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Limited Ltd Banham Canyon Dr</div>
+                    <div class="cams-items" id="13"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Rob's Liqour Great Ocean Hwy</div>
+                    <div class="cams-items" id="14"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>24/7 Supermarkt Ineseno Road</div>
+                    <div class="cams-items" id="15"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>24/7 Supermarkt Barbareno Rd.</div>
+                    <div class="cams-items" id="16"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>24/7 Supermarkt Route 68</div>
+                    <div class="cams-items" id="17"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Rob's Liqour Route 68</div>
+                    <div class="cams-items" id="18"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>24/7 Supermarkt Senora Fwy CAM 1</div>
+                    <div class="cams-items" id="19"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>24/7 Supermarkt Alhambra Dr.</div>
+                    <div class="cams-items" id="20"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>24/7 Supermarkt Senora Fwy CAM 2</div>
+                    <div class="cams-items" id="21"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Fleeca Bank Hawick Ave CAM 1</div>
+                    <div class="cams-items" id="22"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Fleeca Bank Hawick Ave CAM 2</div>
+                    <div class="cams-items" id="23"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Fleeca Bank Legion Square</div>
+                    <div class="cams-items" id="24"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Fleeca Bank Del Perro Blvd</div>
+                    <div class="cams-items" id="25"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Fleeca Bank Great Ocean Hwy</div>
+                    <div class="cams-items" id="26"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Paleto Bank</div>
+                    <div class="cams-items" id="27"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Del Vecchio </br> Liquor Paleto Bay</div>
+                    <div class="cams-items" id="28"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Don's Country Store Paleto Bay CAM 1</div>
+                    <div class="cams-items" id="29"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Don's Country Store Paleto Bay CAM 2</div>
+                    <div class="cams-items" id="30"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Don's Country Store Paleto Bay CAM 3</div>
+                    <div class="cams-items" id="31"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Vangelico Jewelery CAM 1</div>
+                    <div class="cams-items" id="32"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Vangelico Jewelery CAM 2</div>
+                    <div class="cams-items" id="33"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Vangelico Jewelery CAM 3</div>
+                    <div class="cams-items" id="34"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Vangelico Jewelery CAM 4</div>
+					<div class="cams-items" id="35"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Airport CAM 1</div>
+					<div class="cams-items" id="36"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Airport CAM 2</div>
+					<div class="cams-items" id="37"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Airport CAM 3</div>
+					<div class="cams-items" id="38"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Airport CAM 4</div>
+					<div class="cams-items" id="39"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Airport CAM 5</div>
+					<div class="cams-items" id="40"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Airport CAM 6</div>
+					<div class="cams-items" id="41"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Airport CAM 7</div>
+					<div class="cams-items" id="42"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Airport CAM 8</div>
+					<div class="cams-items" id="43"><span class="fas fa-video" style="font-size:40px;margin:20px auto;display:block"></span>Airport CAM 9</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="map-page-container close-all">
+        <div class="header">
+            <img src="img/sasp_badge.webp" class="badge-logo">
+            <div class="header-left">
+                <div class="header-title" style="color: #caa95d; font-weight: bold; font-size: 18px;">SAN ANDREAS STATE POLICE</div>
+                <div style="color: white; font-weight: lighter; font-size: 16px;">Mobile Database Terminal</div>
+            </div>
+            <div class="header-middle">
+                <div class="date">Wird geladen...</div>
+                <div class="time">00:00</div>
+            </div>
+            <div class="header-right">
+                <div style="color: white; font-weight: lighter; font-size: 22px;" class="name-shit">Wird geladen...
+                </div>
+                <div style="color: lightgray; font-size: 15px;"><span class="fas fa-map-pin header-pin"></span><span class="header-location"></span></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="nav-menu">
+                <div class="nav-item" data-page=".dashboard-page-container">Übersicht</div>
+                <div class="nav-item" data-page=".profile-page-container">Profile</div>
+                <div class="nav-item incidents-nav-item" data-page=".incidents-page-container">Vorfälle</div>
+                <div class="nav-item" data-page=".reports-page-container">Berichte</div>
+                <div class="nav-item map-nav-item active-nav" data-page=".map-page-container">Karte</div>
+                <div class="nav-item bolo-nav-item" data-page=".bolos-page-container">BOLOs</div>
+                <div class="nav-item penalcode-nav-item" data-page=".penalcode-page-container">Besetzung</div>
+                <div class="nav-item sop-nav-item" data-page=".sop-page-container">Dienstanweisungen</div>
+                <div class="nav-item dmv-nav-item" data-page=".dmv-page-container">Zulassungsstelle</div>
+                <div class="nav-item weapons-nav-item" data-page=".weapons-page-container">Waffen</div>
+                <div class="nav-item cams-nav-item" data-page=".cams-page-container">Kameras</div>
+                <div class="nav-item" data-page=".stafflogs-page-container">Personalprotokolle</div>
+            </div>
+            <div class="calls-container">
+                <div class="calls-search-title"> <span class="fas fa-search"></span> Einsatzanrufe</div>
+                <div class="calls-search-input"><input id="calls-search-input" placeholder="Einsatzanrufe suchen..."> </div>
+                <div class="active-calls-list">
+                    <div class="active-calls-item">
+                        <div class="active-call-inner-container">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <div style="display: flex;" class="map-title-holder" data-dbid=0>
+                    <div class="map-title">Einsatzkarte</div>
+                    <div class="map-clear">Leeren</div>
+                </div>
+                <div class="map-item" id="map-item"></div>
+            </div>
+        </div>
+    </div>
+    <div class="impound-form" style="display: none;">
+        <form>
+            <i class="far fa-id-card fa-lg"></i><input type="text" class="impound-plate" id="plate" name="plate" placeholder="Kennzeichen" disabled><br>
+            <i class="far fa-sticky-note fa-lg"></i><input type="text" class="impound-linkedreport" id="linkedreport" name="linkedreport" placeholder="Verknüpfter Bericht" required><br>
+            <i class="far fa-money-bill-alt fa-lg"></i><input type="text" class="impound-fee" id="fee" name="fee" placeholder="Gebühr" required><br>
+            <i class="far fa-clock fa-lg"></i><input type="text" id="time" class="impound-time" name="time" placeholder="Zeit (in Minuten)" required><br>
+        </form>
+        <div class="impound-buttons">
+            <div class="impound-cancel">Abbrechen</div>
+            <div class="impound-submit">Einreichen</div>
+        </div>
+    </div>
+    <script src="mock.js"></script>
+    <script src="app.js"></script>
+    <script src="assignments.js"></script>
+    <script src="sop-content.js"></script>
+    <script src="sop.js"></script>
+    <script src="modern.js"></script>
+    <script src="mock-start.js"></script>
+</body>
+
+</html>

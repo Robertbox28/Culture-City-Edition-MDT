@@ -1,0 +1,24 @@
+.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}
+.leaflet-container{overflow:hidden;outline:0;touch-action:none;background:#11a8d4}
+.leaflet-container img.leaflet-image-layer{max-width:none!important;max-height:none!important}
+.leaflet-marker-icon,.leaflet-image-layer{user-select:none}
+.leaflet-pane{z-index:400}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}
+.leaflet-zoom-animated{transform-origin:0 0}
+.leaflet-zoom-anim .leaflet-zoom-animated{transition:transform .25s cubic-bezier(0,0,.25,1)}
+.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:grab}.leaflet-dragging .leaflet-grab{cursor:grabbing}
+.leaflet-marker-icon{pointer-events:auto}
+.leaflet-control{position:relative;z-index:800;pointer-events:auto;float:left;clear:both}
+.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}
+.leaflet-top{top:0}.leaflet-left{left:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}
+.leaflet-top .leaflet-control{margin-top:10px}.leaflet-left .leaflet-control{margin-left:10px}
+.leaflet-control-zoom a{display:block;width:28px;height:28px;line-height:28px;text-align:center;text-decoration:none;font:bold 18px monospace;background:var(--color-5);color:#fff;border:1px solid var(--color-3)}
+.leaflet-tooltip{position:absolute;pointer-events:none;white-space:nowrap}
+.leaflet-control-attribution{display:none}
+/* Trumbowyg minimal */
+.trumbowyg-box{border:1px solid var(--color-3);border-radius:4px;display:flex;flex-direction:column}
+.trumbowyg-button-pane{display:flex;flex-wrap:wrap;gap:2px;padding:4px;background:var(--color-5);border-bottom:1px solid var(--color-3)}
+.trumbowyg-button-pane button{background:var(--color-4);border:0;color:#ddd;font:11px Montserrat,sans-serif;padding:3px 6px;border-radius:3px;cursor:pointer}
+.trumbowyg-button-group{display:flex;gap:2px}
+.trumbowyg-dropdown,.trumbowyg-modal,.trumbowyg-textarea,.trumbowyg-overlay{display:none!important}
+.trumbowyg-editor{min-height:260px;padding:10px;outline:none;overflow:auto;color:#fff}
+.trumbowyg-editor p{margin:4px 0}

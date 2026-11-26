@@ -1,0 +1,217 @@
+/* ps-dispatch – Leitstellen-Popup im Design des MDT (Culture City)
+   Erstellt von Robertbox28 (https://robertbox28.ch/) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --accent: #3B82F6;            /* Polizei */
+    --accent-soft: rgba(59, 130, 246, .18);
+    --panel: rgba(15, 20, 30, .88);
+    --panel-2: rgba(28, 35, 50, .88);
+    --text: #F1F5F9;
+    --muted: rgba(226, 232, 240, .66);
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    background: transparent;
+}
+
+::-webkit-scrollbar { width: 0; }
+
+.dispatch-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+}
+
+.dispatch-holder {
+    width: 46vh;
+    height: 86vh;
+    margin: 9.5vh 1.2vh 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: .8vh;
+    overflow-y: scroll;
+}
+
+/* ---------- Karte ---------- */
+.dispatch-item {
+    position: relative;
+    flex: none;                    /* nie zusammenquetschen */
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.1vh 1.3vh 1.1vh 1.7vh;
+    border-radius: 1.1vh;
+    background: linear-gradient(135deg, var(--panel-2), var(--panel));
+    border: 1px solid rgba(255, 255, 255, .07);
+    box-shadow: 0 1vh 2.6vh rgba(0, 0, 0, .45);
+    color: var(--text);
+    overflow: hidden;
+}
+.dispatch-item::before {           /* Farbstreifen der Abteilung */
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: .45vh;
+    background: var(--accent);
+}
+.dispatch-item::after {            /* sanfter Farbschimmer */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120% 80% at 0% 0%, var(--accent-soft), transparent 60%);
+    pointer-events: none;
+}
+
+.dept-police   { --accent: #3B82F6; --accent-soft: rgba(59, 130, 246, .18); }
+.dept-ems      { --accent: #EF4444; --accent-soft: rgba(239, 68, 68, .18); }
+.dept-fire     { --accent: #F97316; --accent-soft: rgba(249, 115, 22, .20); }
+.dept-response { --accent: #22C55E; --accent-soft: rgba(34, 197, 94, .18); }
+.dept-doj      { --accent: #B08850; --accent-soft: rgba(176, 136, 80, .20); }
+.dept-taxi     { --accent: #F5C518; --accent-soft: rgba(245, 197, 24, .18); }
+.dept-mechanic { --accent: #E6D64A; --accent-soft: rgba(230, 214, 74, .18); }
+.dept-mechanic .call-code:not(.priority-1):not(.priority-2) { color: #111; }
+.dept-taxi .call-code:not(.priority-1):not(.priority-2) { color: #111; }
+.dispatch-item.is-urgent { border-color: rgba(239, 68, 68, .55); }
+
+/* ---------- Kopfzeile ---------- */
+.top-info-holder {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: .6vh;
+    white-space: nowrap;
+}
+.dept-tag {
+    font-size: 1.05vh;
+    font-weight: 800;
+    letter-spacing: .12vh;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+.call-id {
+    margin-left: auto;
+    font-size: 1.15vh;
+    font-weight: 700;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+.title-row {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: .8vh;
+    margin-top: .55vh;
+}
+.call-code {
+    flex: none;
+    padding: .35vh 1vh;
+    border-radius: .7vh;
+    font-size: 1.25vh;
+    font-weight: 800;
+    color: #fff;
+    background: var(--accent);
+    white-space: nowrap;
+}
+.call-name {
+    font-size: 1.65vh;
+    font-weight: 700;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Priorität 1: rot pulsierend, Priorität 2: orange */
+.priority-1 {
+    background: #DC2626;
+    animation: prio-pulse 1.2s ease-in-out infinite;
+}
+.priority-2 { background: #D97706; }
+@keyframes prio-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, .7); }
+    50%      { box-shadow: 0 0 0 .6vh rgba(220, 38, 38, 0); }
+}
+
+/* ---------- Details ---------- */
+.bottom-info-holder {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .45vh 1.2vh;
+    margin-top: .9vh;
+    font-size: 1.2vh;
+    font-weight: 500;
+    color: var(--text);
+}
+.call-bottom-info {
+    display: flex;
+    align-items: flex-start;
+    gap: .6vh;
+    min-width: 0;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+.call-bottom-info .fas,
+.call-bottom-info .far,
+.call-bottom-info .fab {
+    flex: none;
+    width: 1.4vh;
+    margin-top: .15vh;
+    text-align: center;
+    color: var(--accent);
+}
+.call-bottom-info.wide,
+.call-bottom-information { grid-column: 1 / -1; }
+.call-bottom-information {
+    margin-top: .3vh;
+    padding: .7vh .9vh;
+    border-radius: .7vh;
+    background: rgba(255, 255, 255, .05);
+    color: #fff;
+    font-weight: 500;
+}
+.line { display: none; }
+
+/* ---------- Fusszeile ---------- */
+.respond-hint {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: .6vh;
+    margin-top: .9vh;
+    padding-top: .8vh;
+    border-top: 1px solid rgba(255, 255, 255, .07);
+    font-size: 1.1vh;
+    color: var(--muted);
+}
+.key {
+    padding: .15vh .7vh;
+    border-radius: .5vh;
+    background: rgba(255, 255, 255, .12);
+    border: 1px solid rgba(255, 255, 255, .18);
+    color: #fff;
+    font-weight: 800;
+}
+.time-bar {
+    position: absolute;
+    left: 0; bottom: 0;
+    height: .25vh;
+    width: 100%;
+    background: var(--accent);
+    opacity: .75;
+    transform-origin: left;
+    animation-name: shrink;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    z-index: 2;
+}
+@keyframes shrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }

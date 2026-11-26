@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MDT-Anleitung Culture City</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: feste Inhaltsleiste links, Lesespalte rechts, Vorschau als breiter Block ganz oben */
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --ink: #161a21;
+  --muted: #5b6472;
+  --line: #dde1e7;
+  --accent: #e0661c;
+  --accent-ink: #ffffff;
+  --code-bg: #eef0f3;
+  --ok: #1d8a4b;
+  --no: #b3261e;
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Barlow", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1216;
+    --surface: #171b21;
+    --ink: #e9ecf1;
+    --muted: #9aa4b2;
+    --line: #2a3039;
+    --accent: #f08a3e;
+    --accent-ink: #1a0f06;
+    --code-bg: #1f252d;
+    --ok: #4cc283;
+    --no: #f07a70;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1216;
+  --surface: #171b21;
+  --ink: #e9ecf1;
+  --muted: #9aa4b2;
+  --line: #2a3039;
+  --accent: #f08a3e;
+  --accent-ink: #1a0f06;
+  --code-bg: #1f252d;
+  --ok: #4cc283;
+  --no: #f07a70;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 17px/1.6 var(--font-body);
+}
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+.wrap {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 48px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* ---- Inhaltsleiste */
+.toc {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 15px;
+}
+.toc-brand {
+  font: 700 22px/1.1 var(--font-display);
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+}
+.toc-sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+.toc a {
+  color: var(--ink);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: flex;
+  gap: 10px;
+}
+.toc a span { color: var(--muted); font: 600 12px/1.9 var(--font-mono); width: 18px; }
+.toc a:hover { background: var(--code-bg); }
+
+/* ---- Inhalt */
+main { min-width: 0; display: flex; flex-direction: column; gap: 56px; }
+header.hero { display: flex; flex-direction: column; gap: 10px; }
+.kicker { font: 600 13px/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+h1 {
+  font: 700 clamp(40px, 6vw, 64px)/1 var(--font-display);
+  letter-spacing: 0.01em;
+  margin: 0;
+  text-wrap: balance;
+}
+.byline { font-size: 15px; color: var(--muted); margin: 0; }
+.byline a { font-weight: 600; }
+.lead { font-size: 19px; color: var(--muted); max-width: 64ch; margin: 0; }
+
+section { display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 20px; }
+h2 {
+  font: 700 32px/1.1 var(--font-display);
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  text-wrap: balance;
+}
+h2 .num { font: 600 14px/1 var(--font-mono); color: var(--accent); }
+h3 { font: 700 22px/1.2 var(--font-display); margin: 12px 0 0; letter-spacing: 0.01em; }
+p, li { max-width: 68ch; }
+p { margin: 0; }
+ul, ol { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
+
+code, pre { font-family: var(--font-mono); font-size: 14px; }
+code { background: var(--code-bg); padding: 1px 6px; border-radius: 4px; }
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 0;
+  overflow-x: auto;
+  line-height: 1.55;
+}
+pre code { background: none; padding: 0; }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 700; background: var(--code-bg); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.y, td.n { text-align: center; font-weight: 700; white-space: nowrap; }
+td.y { color: var(--ok); }
+td.n { color: var(--no); }
+kbd { display: inline-block; padding: 0 .45em; border-radius: 5px; border: 1px solid rgba(127,127,127,.45); font: 600 .9em ui-monospace, monospace; }
+td code { white-space: nowrap; }
+
+.note {
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  max-width: 76ch;
+}
+
+/* ---- Vorschau */
+.preview {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.preview-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.preview-bar strong { font: 700 18px/1 var(--font-display); margin-right: 6px; }
+.chip {
+  font: 600 13px/1 var(--font-body);
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  padding: 7px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.chip:hover { border-color: var(--accent); }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.preview-open { margin-left: auto; font-size: 14px; font-weight: 600; }
+.frame { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #0b0e13; }
+.frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.preview-foot { padding: 10px 14px; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); }
+
+.steps { counter-reset: s; list-style: none; padding: 0; gap: 12px; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 12px; max-width: 76ch; }
+.steps li::before {
+  content: counter(s);
+  font: 700 15px/34px var(--font-mono);
+  text-align: center;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--code-bg);
+  color: var(--accent);
+}
+.steps li > div { display: block; padding-top: 5px; }
+.steps li > div pre { margin: 8px 0; }
+
+footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding-top: 18px; }
+
+@media (max-width: 900px) {
+  .wrap { grid-template-columns: 1fr; gap: 28px; }
+  .toc { position: static; flex-direction: row; flex-wrap: wrap; }
+  .toc-brand, .toc-sub { width: 100%; }
+  .frame { aspect-ratio: 4 / 3; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="toc" aria-label="Inhalt">
+    <div class="toc-brand">ps-mdt</div>
+    <div class="toc-sub">Anleitung für Culture City · von <a href="https://robertbox28.ch/">Robertbox28</a></div>
+    <a href="#vorschau"><span>00</span>Live-Vorschau</a>
+    <a href="#neu"><span>01</span>Was neu ist</a>
+    <a href="#installation"><span>02</span>Installation</a>
+    <a href="#einstellungen"><span>03</span>Einstellungen</a>
+    <a href="#bereiche"><span>04</span>Bereiche im MDT</a>
+    <a href="#besetzung"><span>05</span>Besetzung</a>
+    <a href="#anklagen"><span>06</span>Vorfälle und Anklagen</a>
+    <a href="#anpassen"><span>07</span>Selbst anpassen</a>
+    <a href="#leitstelle"><span>08</span>Leitstelle</a>
+    <a href="#fehler"><span>09</span>Fehlerbehebung</a>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="kicker">FiveM · QBCore · ps-mdt 2.5</div>
+      <h1>Das Mobile Data Terminal</h1>
+      <p class="lead">Wie du das überarbeitete MDT installierst, einstellst und im Dienst benutzt. Für Polizei, Rettungsdienst, Feuerwehr, Justiz, Regierung, Taxi und Mechaniker.</p>
+      <p class="byline">Erstellt von <a href="https://robertbox28.ch/">Robertbox28</a></p>
+    </header>
+
+    <!-- ===================================================== VORSCHAU -->
+    <section id="vorschau">
+      <h2><span class="num">00</span>Live-Vorschau</h2>
+      <p>Die Vorschau läuft mit dem echten MDT-Code und Testdaten. Wähle eine Behörde, um ihre Oberfläche zu sehen.</p>
+      <div class="preview">
+        <div class="preview-bar" role="group" aria-label="Behörde wählen">
+          <strong>Behörde</strong>
+          <button class="chip" type="button" data-hash="lspd" aria-pressed="true">LSPD</button>
+          <button class="chip" type="button" data-hash="bcso" aria-pressed="false">BCSO</button>
+          <button class="chip" type="button" data-hash="sasp" aria-pressed="false">SASP</button>
+          <button class="chip" type="button" data-hash="ems" aria-pressed="false">EMS</button>
+          <button class="chip" type="button" data-hash="lsfd" aria-pressed="false">LSFD</button>
+          <button class="chip" type="button" data-hash="doj" aria-pressed="false">Justiz</button>
+          <button class="chip" type="button" data-hash="regierung" aria-pressed="false">Regierung</button>
+          <button class="chip" type="button" data-hash="taxi" aria-pressed="false">Taxi</button>
+          <button class="chip" type="button" data-hash="mechaniker" aria-pressed="false">East Customs</button>
+          <a class="preview-open" id="preview-open" href="vorschau/index.html#lspd">Vorschau gross öffnen</a>
+        </div>
+        <div class="frame">
+          <iframe id="preview-frame" src="vorschau/index.html#lspd" title="MDT Live-Vorschau" loading="lazy"></iframe>
+        </div>
+        <div class="preview-foot">Testdaten. Die Einteilung unter „Besetzung“ lässt sich ausprobieren, alles andere speichert nichts. Profile findest du mit der Suche nach „Huber“ oder „Roth“.</div>
+      </div>
+    </section>
+
+    <!-- ===================================================== NEU -->
+    <section id="neu">
+      <h2><span class="num">01</span>Was neu ist</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Bereich</th><th>Änderung</th></tr>
+          <tr><td>Design</td><td>Modernes Design für alle Behörden, Kopfzeile mit Uhr, Icons in der Navigation. Alle Texte auf Deutsch.</td></tr>
+          <tr><td>Karte</td><td>Eigene GTA-V-Karte inklusive Cayo Perico, kalibriert auf Spielkoordinaten. Einsätze erscheinen als Marker.</td></tr>
+          <tr><td>LSFD</td><td>Eigene Oberfläche für die Feuerwehr mit Einsatzberichten und Brandschau. Daten getrennt vom EMS.</td></tr>
+          <tr><td>Regierung</td><td>Eigene Oberfläche mit Gewerberegister für Business-Lizenzen, Sitzungsprotokollen und Erlassen. Die Justiz arbeitet im selben Gewerberegister mit.</td></tr>
+          <tr><td>Besetzung</td><td>Einteilung: wer mit wem in welchem Fahrzeug fährt. Live für die ganze Behörde.</td></tr>
+          <tr><td>Strafkatalog</td><td>Der Culture-City-Bussgeldkatalog mit 128 Einträgen in 11 Kapiteln.</td></tr>
+          <tr><td>Taxi und Mechaniker</td><td>Eigene Oberflächen mit Fahrtenbuch und Schichtberichten (Taxi) bzw. Werkstattaufträgen und Rechnungen (Mechaniker). Kein Zugriff auf Akten der Behörden.</td></tr>
+          <tr><td>Dienstanweisungen</td><td>Eingebaute Anweisungen für Polizei, EMS, LSFD, Justiz, Regierung, Taxi und Mechaniker, mit Suche.</td></tr>
+          <tr><td>Telefon</td><td>Telefonnummern kommen aus LB Phone.</td></tr>
+          <tr><td>Leitstelle</td><td>ps-dispatch ist auf das MDT abgestimmt: gleiche Behörden, deutsche Meldungen, neues Popup im MDT-Design, LSFD als eigene Gruppe.</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================================================== INSTALLATION -->
+    <section id="installation">
+      <h2><span class="num">02</span>Installation</h2>
+      <ol class="steps">
+        <li><div><b>Sichern.</b> Kopiere deinen bisherigen Ordner <code>ps-mdt</code> an einen sicheren Ort.</div></li>
+        <li><div><b>Ersetzen.</b> Lösche die alten Ordner <code>ps-mdt</code> und <code>ps-dispatch</code> auf dem Server und kopiere die beiden Ordner aus dem ZIP an dieselbe Stelle.</div></li>
+        <li><div><b>Reihenfolge in der <code>server.cfg</code> prüfen.</b> ps-mdt muss nach seinen Abhängigkeiten starten:
+<pre><code>ensure oxmysql
+ensure qb-core
+ensure ps-dispatch
+ensure lb-phone
+ensure ps-mdt</code></pre></div></li>
+        <li><div><b>Datenbank.</b> Die neue Tabelle <code>mdt_assignments</code> für die Besetzung legt sich beim ersten Start selbst an. Sie steht zusätzlich in <code>mdt.sql</code>, falls du sie lieber von Hand anlegst.</div></li>
+        <li><div><b>Neu laden.</b> In der Server-Konsole:
+<pre><code>refresh
+restart ps-dispatch
+restart ps-mdt</code></pre>
+        <code>refresh</code> ist nötig, weil das Manifest neue Dateien enthält.</div></li>
+      </ol>
+      <p class="note">Bestehende Daten der Feuerwehr wurden früher unter <code>ambulance</code> gespeichert und bleiben beim EMS. Neue LSFD-Einträge werden als <code>fire</code> gespeichert. Einzelne alte Einträge kannst du per SQL umstellen, zum Beispiel <code>UPDATE mdt_reports SET jobtype='fire' WHERE id IN (...)</code>.</p>
+    </section>
+
+    <!-- ===================================================== EINSTELLUNGEN -->
+    <section id="einstellungen">
+      <h2><span class="num">03</span>Einstellungen</h2>
+      <p>Alle Einstellungen stehen in <code>shared/config.lua</code>.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Einstellung</th><th>Standard</th><th>Wirkung</th></tr>
+          <tr><td><code>Config.PoliceJobs</code></td><td>police, bcso …</td><td>Jobs mit Polizei-Oberfläche.</td></tr>
+          <tr><td><code>Config.AmbulanceJobs</code></td><td>ambulance</td><td>Jobs mit EMS-Oberfläche.</td></tr>
+          <tr><td><code>Config.FireJobs</code></td><td>firefighter</td><td>Jobs mit LSFD-Oberfläche.</td></tr>
+          <tr><td><code>Config.DojJobs</code></td><td>lawyer, judge</td><td>Jobs mit Justiz-Oberfläche.</td></tr>
+          <tr><td><code>Config.GovJobs</code></td><td>regierung, government, mayor</td><td>Jobs mit Regierungs-Oberfläche. Die Namen müssen zu den Jobs in <code>qb-core/shared/jobs.lua</code> passen. Zusätzlich in <code>ui/app.js</code> im Objekt <code>GovJobs</code> eintragen.</td></tr>
+          <tr><td><code>Config.TaxiJobs</code></td><td>taxi</td><td>Jobs mit Taxi-Oberfläche. Zusätzlich in <code>ui/app.js</code> im Objekt <code>TaxiJobs</code> eintragen.</td></tr>
+          <tr><td><code>Config.MechanicJobs</code></td><td>mechanic, bennys</td><td>Jobs mit der Mechaniker-Oberfläche von East Customs. Zusätzlich in <code>ui/app.js</code> im Objekt <code>MechanicJobs</code> eintragen.</td></tr>
+          <tr><td><code>Config.LogPerms</code></td><td>je Job</td><td>Wer die Personalprotokolle sieht. <code>[18] = true</code> heisst genau Rang 18, <code>min = 3</code> heisst ab Rang 3. Für Taxi, Mechaniker und Bennys ist ab Rang 3 eingestellt, für Regierung ab Rang 2, für Bürgermeister und Richter jeder Rang. Bitte an deine Ränge anpassen.</td></tr>
+          <tr><td><code>Config.OnlyShowOnDuty</code></td><td>true</td><td>Unter „Aktive Einheiten“ nur Personen im Dienst zeigen.</td></tr>
+          <tr><td><code>Config.AssignmentEditGrade</code></td><td>default = 0</td><td>Ab welchem Rang die Besetzung bearbeitet werden darf, pro Job einstellbar.</td></tr>
+          <tr><td><code>Config.AssignmentMaxMembers</code></td><td>6</td><td>Maximale Personen pro Einheit.</td></tr>
+          <tr><td><code>Config.AssignmentVehicles</code></td><td>je Behörde</td><td>Fahrzeugvorschläge in der Besetzung.</td></tr>
+          <tr><td><code>Config.PhoneSystem</code></td><td>'auto'</td><td><code>'auto'</code> nimmt LB Phone, wenn es läuft. <code>'qb'</code> erzwingt die QBCore-Nummer.</td></tr>
+          <tr><td><code>Config.LBPhoneFormatNumber</code></td><td>true</td><td>Nummern im Format von LB Phone anzeigen.</td></tr>
+          <tr><td><code>Config.LogPerms</code></td><td>je Job</td><td>Welche Ränge (grade.level) die Personalprotokolle sehen.</td></tr>
+          <tr><td><code>Config.sopLink</code></td><td>je Job</td><td>Optionaler externer Link, erreichbar über „Externe Dienstanweisung“.</td></tr>
+          <tr><td><code>Config.RosterLink</code></td><td>je Job</td><td>Optionale Tabelle, erreichbar über das Tabellen-Symbol in der Besetzung.</td></tr>
+          <tr><td><code>Config.PenalCode</code></td><td>Culture City</td><td>Der Strafkatalog, siehe Abschnitt 06.</td></tr>
+        </table>
+      </div>
+      <h3>Beispiel: Besetzung nur ab Rang 2 bearbeiten</h3>
+<pre><code>Config.AssignmentEditGrade = {
+    default = 0,
+    ['police'] = 2,
+    ['firefighter'] = 1,
+}</code></pre>
+    </section>
+
+    <!-- ===================================================== BEREICHE -->
+    <section id="bereiche">
+      <h2><span class="num">04</span>Bereiche im MDT</h2>
+      <p>Welche Behörde welchen Bereich sieht. Im Spiel öffnest du das MDT mit der Taste <code>K</code> oder dem Befehl <code>/mdt</code>. Die Taste lässt sich in den GTA-Einstellungen unter Tastenbelegung / FiveM ändern.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Bereich</th><th>Polizei</th><th>EMS</th><th>LSFD</th><th>Justiz</th><th>Regierung</th><th>Wofür</th></tr>
+          <tr><td>Übersicht</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td>Funk, Pinnwand, aktive Einheiten, letzte Einsätze.</td></tr>
+          <tr><td>Profile</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td>Personen suchen, Notizen, Tags, Fotos. Lizenzen und Fahrzeuge nur Polizei und Justiz. Jede Behörde hat eigene Notizen, Tags und Galerie und überschreibt die anderen nicht. Auch Taxi und East Customs haben Profile, aber ohne Akten.</td></tr>
+          <tr><td>Vorfälle</td><td class="y">ja</td><td class="n">nein</td><td class="n">nein</td><td class="y">lesen</td><td class="n">nein</td><td>Anzeigen und Festnahmen mit Anklagen.</td></tr>
+          <tr><td>Berichte</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">lesen</td><td class="y">ja</td><td>Einsatzberichte. EMS, LSFD und Regierung (Protokolle, Erlasse) erhalten eigene Vorlagen.</td></tr>
+          <tr><td>Karte</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td>Einsätze der eigenen Behörde als Marker, Klick setzt einen Wegpunkt.</td></tr>
+          <tr><td>BOLOs / ICU / Brandschau / Gewerbe</td><td class="y">BOLOs</td><td class="y">ICU</td><td class="y">Brandschau</td><td class="y">Gewerbe&shy;register</td><td class="y">Gewerbe&shy;register</td><td>Gesuchte Fahrzeuge, Patienten auf der Intensivstation, Brandschauen, Business-Lizenzen. Die Justiz unterstützt die Regierung bei der Vergabe: anlegen und bearbeiten ja, löschen nur die Regierung.</td></tr>
+          <tr><td>Besetzung</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td>Einteilung in Einheiten und Fahrzeuge.</td></tr>
+          <tr><td>Dienstanweisungen</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td>Je Behörde eigene Kapitel.</td></tr>
+          <tr><td>Zulassungsstelle</td><td class="y">ja</td><td class="n">nein</td><td class="n">nein</td><td class="y">ja</td><td class="y">lesen</td><td>Fahrzeuge, Code 5, gestohlen, Beschlagnahmung.</td></tr>
+          <tr><td>Waffen</td><td class="y">ja</td><td class="n">nein</td><td class="n">nein</td><td class="y">ja</td><td class="n">nein</td><td>Registrierte Waffen.</td></tr>
+          <tr><td>Kameras</td><td class="y">ja</td><td class="n">nein</td><td class="n">nein</td><td class="y">ja</td><td class="n">nein</td><td>Überwachungskameras von Banken und Läden.</td></tr>
+          <tr><td>Personalprotokolle</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td>Protokoll der Änderungen und Rangliste der Dienstzeiten, je Behörde getrennt. Inhalt nur für Ränge aus <code>Config.LogPerms</code>. Auch Taxi und East Customs haben Personalprotokolle.</td></tr>
+        </table>
+      </div>
+      <h3>Taxi und Mechaniker</h3>
+      <p>Beide haben eine schlanke Oberfläche nur für ihre eigene Arbeit. In den Profilen sehen sie weder Geburtsdatum, Wohnung und Fingerabdruck noch Lizenzen, Vorstrafen oder Haftbefehle. Vorfälle, Waffen, Kameras und die Zulassungsstelle sind gesperrt, auch auf dem Server. Sie haben einen eigenen Funk und sehen keine Einsätze und Einheiten der Behörden.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Bereich</th><th>Taxi</th><th>Mechaniker (East Customs)</th></tr>
+          <tr><td>Profile</td><td>Name, Foto, Telefon, Beruf und eigene Notizen zu Fahrgästen</td><td>Name, Foto, Telefon, Beruf, Fahrzeuge der Person und eigene Notizen zu Kunden</td></tr>
+          <tr><td>Übersicht</td><td>Taxifunk, Pinnwand, eigene Fahrer</td><td>East-Customs-Funk, Pinnwand, eigene Mechaniker</td></tr>
+          <tr><td>Register</td><td><b>Fahrtenbuch</b>: Taxi, Fahrgast, Strecke, Preis, Status</td><td><b>Werkstattaufträge</b>: Kennzeichen, Kunde, Mechaniker, Arbeiten, Kosten</td></tr>
+          <tr><td>Berichte</td><td><b>Schichtberichte</b> mit Fahrten und Einnahmen</td><td><b>Rechnungen</b> mit Positionen und Total</td></tr>
+          <tr><td>Personalprotokolle</td><td>Änderungen und Dienstzeiten der Fahrer</td><td>Änderungen und Dienstzeiten der Mitarbeitenden</td></tr>
+          <tr><td>Besetzung</td><td>Taxi, Taxi-Van, Limousine, Shuttlebus</td><td>Abschleppwagen, Flatbed, Pannenhilfe-Van, Werkstattwagen</td></tr>
+          <tr><td>Karte und Dienstanweisungen</td><td class="y">ja</td><td class="y">ja</td></tr>
+        </table>
+      </div>
+      <h3>Rechtsklick nutzen</h3>
+      <ul>
+        <li>Auf deinem Namen unter „Aktive Einheiten“: Dienststatus, Rufzeichen und Funkkanal setzen.</li>
+        <li>Auf einem Einsatz: ausrücken, abmelden, Wegpunkt setzen oder Notruf beantworten.</li>
+        <li>Auf Pinnwand, Berichten und BOLOs: Einträge löschen.</li>
+        <li>Taxi und Mechaniker: auf einem offenen Auftrag annehmen, abgeben oder Wegpunkt setzen.</li>
+      </ul>
+    </section>
+
+    <!-- ===================================================== BESETZUNG -->
+    <section id="besetzung">
+      <h2><span class="num">05</span>Besetzung</h2>
+      <p>Die Besetzung zeigt, wer mit wem in welchem Fahrzeug unterwegs ist. Jede Behörde hat ihre eigene Einteilung. Alle Polizeibehörden teilen sich eine.</p>
+      <ol class="steps">
+        <li><div><b>Neu</b> klicken und einen Funkrufnamen eingeben, zum Beispiel <code>Adam-12</code> oder <code>Engine 7-1</code>.</div></li>
+        <li><div>Fahrzeug wählen oder mit <b>Mein aktuelles Fahrzeug übernehmen</b> Modell und Kennzeichen automatisch eintragen.</div></li>
+        <li><div>Rechts unter <b>Personal</b> auf Namen klicken, um sie der Einheit zuzuteilen. Wer schon eingeteilt ist, wechselt beim Speichern automatisch.</div></li>
+        <li><div>Status setzen: Verfügbar, Im Einsatz, Pause oder Ausser Dienst.</div></li>
+        <li><div><b>Speichern.</b> Alle derselben Behörde sehen die Änderung sofort.</div></li>
+      </ol>
+      <p class="note"><b>Einteilung zurücksetzen</b> leert die ganze Liste, zum Beispiel beim Schichtwechsel. Zum Schutz vor Versehen braucht das einen zweiten Klick.</p>
+    </section>
+
+    <!-- ===================================================== ANKLAGEN -->
+    <section id="anklagen">
+      <h2><span class="num">06</span>Vorfälle und Anklagen</h2>
+      <ol class="steps">
+        <li><div>Unter <b>Vorfälle</b> mit dem Plus einen neuen Vorfall anlegen. Die Vorlage füllt sich automatisch.</div></li>
+        <li><div>Unter <b>Beteiligte Kriminelle</b> die Person hinzufügen.</div></li>
+        <li><div>Rechtsklick in das Feld unter der Person, dann <b>Anklagen bearbeiten</b>.</div></li>
+        <li><div>Im Katalog links klicken fügt eine Anklage hinzu, rechts klicken entfernt sie. Empfohlene Busse und Haft werden addiert.</div></li>
+        <li><div>Status setzen (Haftbefehl, Schuldig, Bearbeitet), dann mit <b>Gefängnis</b>, <b>Busse</b> oder <b>Sozialstunden</b> vollziehen und speichern.</div></li>
+      </ol>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Farbe im Katalog</th><th>Klasse</th><th>Regel</th></tr>
+          <tr><td>Grün</td><td>Ordnungswidrigkeit</td><td>Keine Haft</td></tr>
+          <tr><td>Orange</td><td>Vergehen</td><td>Unter 30 Monate</td></tr>
+          <tr><td>Rot</td><td>Verbrechen</td><td>Ab 30 Monate</td></tr>
+        </table>
+      </div>
+      <p>Zusätze wie Führerscheinentzug, Sozialstunden oder Lizenzentzug stehen in der Beschreibung und erscheinen, wenn du mit der Maus über einer Anklage bleibst.</p>
+    </section>
+
+    <!-- ===================================================== ANPASSEN -->
+    <section id="anpassen">
+      <h2><span class="num">07</span>Selbst anpassen</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Was</th><th>Datei</th><th>Hinweis</th></tr>
+          <tr><td>Dienstanweisungen</td><td><code>ui/sop-content.js</code></td><td>Pro Behörde eine Liste von Kapiteln mit Titel, Icon und Text.</td></tr>
+          <tr><td>Strafkatalog</td><td><code>shared/config.lua</code></td><td><code>Config.PenalCodeTitles</code> und <code>Config.PenalCode</code>.</td></tr>
+          <tr><td>Farben der Behörden</td><td><code>ui/app.js</code></td><td>Im Objekt <code>customThemes</code>, je zehn Farben plus Abzeichen und Name.</td></tr>
+          <tr><td>Modernes Design</td><td><code>ui/modern.css</code></td><td>Zum Abschalten die Zeile <code>&lt;link rel="stylesheet" href="modern.css"&gt;</code> in <code>ui/dashboard.html</code> entfernen.</td></tr>
+          <tr><td>Karte</td><td><code>ui/app.js</code></td><td>Bild in <code>ui/img/gta_map.webp</code>. Kalibrierung mit <code>MAP_SCALE</code>, <code>MAP_OFFSET_X</code>, <code>MAP_OFFSET_Y</code> und <code>CAYO_SHIFT_Y</code>.</td></tr>
+          <tr><td>Fahrzeugvorschläge</td><td><code>shared/config.lua</code></td><td><code>Config.AssignmentVehicles</code>.</td></tr>
+        </table>
+      </div>
+      <h3>Beispiel: Kapitel in den Dienstanweisungen</h3>
+<pre><code>{ title: "Funkdisziplin", icon: "fa-tower-broadcast", body: `
+  &lt;p&gt;Funksprüche sind kurz und sachlich.&lt;/p&gt;
+  &lt;ul&gt;&lt;li&gt;Zuerst Rufzeichen, dann Information.&lt;/li&gt;&lt;/ul&gt;` },</code></pre>
+      <p>Icons kommen aus Font Awesome 6 (Free, Solid). Nach Änderungen an Dateien in <code>ui/</code> reicht <code>restart ps-mdt</code>.</p>
+    </section>
+
+    <!-- ===================================================== LEITSTELLE -->
+    <section id="leitstelle">
+      <h2><span class="num">08</span>Leitstelle (ps-dispatch)</h2>
+      <p>ps-dispatch liefert die Einsätze, die im MDT unter „Einsatzleitung“ und auf der Karte erscheinen. Es ist jetzt auf das MDT abgestimmt.</p>
+      <div class="preview">
+        <div class="frame">
+          <iframe src="leitstelle/index.html" title="Vorschau der Einsatzmeldungen" loading="lazy"></iframe>
+        </div>
+        <div class="preview-foot">Vorschau der Meldungen im Spiel. Mit den Knöpfen unten links lassen sich Testeinsätze auslösen. <a href="leitstelle/index.html">Gross öffnen</a></div>
+      </div>
+      <h3>Wer welche Einsätze bekommt</h3>
+      <p>Statt einzelner Jobnamen gibt es drei Gruppen. Sie stehen in <code>ps-dispatch/config.lua</code> unter <code>Config.AuthorizedJobs</code> und entsprechen den Listen im MDT.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Gruppe</th><th>Jobs</th><th>Entspricht im MDT</th></tr>
+          <tr><td><code>LEO</code></td><td>police, lspd, bcso, lssd, sasp, sast, sapr, doc</td><td><code>Config.PoliceJobs</code> (ohne Anwälte)</td></tr>
+          <tr><td><code>EMS</code></td><td>ambulance, doctor</td><td><code>Config.AmbulanceJobs</code></td></tr>
+          <tr><td><code>FIRE</code></td><td>firefighter</td><td><code>Config.FireJobs</code></td></tr>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Einsatz</th><th>Polizei</th><th>EMS</th><th>LSFD</th><th>Anwälte</th></tr>
+          <tr><td>Notruf 911</td><td class="y">ja</td><td class="y">ja</td><td class="n">nein</td><td class="y">mithören</td></tr>
+          <tr><td>Notruf 311</td><td class="n">nein</td><td class="y">ja</td><td class="y">ja</td><td class="y">mithören</td></tr>
+          <tr><td>Verletzte Person (10-69)</td><td class="n">nein</td><td class="y">ja</td><td class="y">ja</td><td class="y">mithören</td></tr>
+          <tr><td>Beamter oder Rettungskraft am Boden (10-99)</td><td class="y">ja</td><td class="y">ja</td><td class="y">ja</td><td class="y">mithören</td></tr>
+          <tr><td>Explosion (10-80)</td><td class="y">ja</td><td class="n">nein</td><td class="y">ja</td><td class="y">mithören</td></tr>
+          <tr><td>Raub, Schüsse, Diebstahl und alle anderen</td><td class="y">ja</td><td class="n">nein</td><td class="n">nein</td><td class="y">mithören</td></tr>
+        </table>
+      </div>
+      <h3>Aufträge für Taxi und Mechaniker</h3>
+      <p>Taxi und Werkstatt haben einen eigenen Auftrags-Dispatch, getrennt von Polizei und Rettung.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Befehl</th><th>Geht an</th><th>Popup und Karte</th></tr>
+          <tr><td><code>/taxi [Nachricht]</code></td><td>Alle Taxifahrer im Dienst (Gruppe <code>TAXI</code>)</td><td>Gelb, Code TAXI, Taxi-Symbol</td></tr>
+          <tr><td><code>/mechaniker [Nachricht]</code></td><td>Alle Mechaniker im Dienst (Gruppe <code>MECH</code>)</td><td>Gelb im East-Customs-Stil, Code MECH, Schraubenschlüssel</td></tr>
+        </table>
+      </div>
+      <ul>
+        <li>Die Nachricht ist freiwillig. Ohne Text wird ein Standardsatz gesendet.</li>
+        <li>Wer anruft, braucht ein Telefon. Zwischen zwei Bestellungen liegen 60 Sekunden (<code>Config.ServiceCallCooldown</code>).</li>
+        <li>Name und LB-Phone-Nummer des Kunden stehen im Auftrag.</li>
+        <li>Mit <kbd>E</kbd> nimmt der Fahrer oder Mechaniker den Auftrag an und bekommt den Wegpunkt. Im MDT stehen die Aufträge unter „Offene Aufträge“ und auf der Karte.</li>
+        <li>Taxi und Werkstatt sehen nur ihre eigenen Aufträge, Polizei und Rettung sehen sie nicht.</li>
+        <li>Für eine Handy-App oder andere Skripte: <code>exports['ps-dispatch']:TaxiCall(nachricht)</code> und <code>exports['ps-dispatch']:MechanicCall(nachricht)</code>.</li>
+      </ul>
+      <p>Die Jobs der Gruppen stehen in <code>ps-dispatch/config.lua</code> unter <code>Config.AuthorizedJobs.TAXI</code> und <code>Config.AuthorizedJobs.MECH</code>.</p>
+      <h3>Anwälte hören mit</h3>
+      <p>Anwälte (<code>lawyer</code>) bekommen alle Einsätze, die an Polizei oder Feuerwehr gehen: Popup, Kartenpunkt und Anzeige im MDT. Das Popup ist braun und mit „Justiz · mithören“ beschriftet. Anwälte werden nicht als Einheit an Einsätze angehängt. Einsätze, die nur an den Rettungsdienst gehen, sehen sie nicht.</p>
+      <p>Wer mithört, steht in <code>ps-dispatch/config.lua</code>:</p>
+<pre><code>Config.DispatchListeners = {
+    ['lawyer'] = { 'LEO', 'FIRE' },
+}</code></pre>
+      <h3>Was sich geändert hat</h3>
+      <ul>
+        <li><b>Einsätze im MDT:</b> Bisher sahen nur die Jobs <code>police</code> und <code>ambulance</code> die Einsätze im MDT. Jetzt sehen sie alle Jobs der Gruppen, also auch LSPD, BCSO, SASP, DOC und LSFD.</li>
+        <li><b>Deutsch:</b> Meldungen, Kartenpunkte, Fahrzeugfarben, Fahrtrichtung, Geschlecht und Hinweise sind auf Deutsch. Tempo in km/h.</li>
+        <li><b>Popup:</b> Neues Design passend zum MDT, Farbe je Behörde (Polizei blau, EMS rot, LSFD orange). Mit <kbd>E</kbd> fährst du den Einsatz an, solange das Popup sichtbar ist.</li>
+        <li><b>Telefonnummer:</b> Bei <code>/911</code> und <code>/311</code> kommt die Nummer aus LB Phone. Anonyme Anrufe bleiben unterdrückt.</li>
+        <li><b>Einheiten:</b> Im MDT stehen angehängte Einheiten als Polizei, EMS oder LSFD.</li>
+        <li><b>Fehler behoben:</b> <code>/togglealerts</code> hat nie funktioniert, beim Abhängen vom Einsatz entstanden Lücken in der Einheitenliste, und 311 erschien auf der Karte als 911.</li>
+      </ul>
+      <h3>Eigene Alarme aus anderen Skripten</h3>
+<pre><code>exports['ps-dispatch']:CustomAlert({
+    coords = GetEntityCoords(PlayerPedId()),
+    message = "Einbruch in Lagerhalle",
+    dispatchCode = "10-90",
+    description = "Einbruch in Lagerhalle",
+    priority = 2,
+    job = { "LEO" },   -- oder { "EMS", "FIRE" }
+})</code></pre>
+      <p class="note">Neue Jobs immer an zwei Stellen eintragen: in <code>ps-mdt/shared/config.lua</code> und in <code>ps-dispatch/config.lua</code>.</p>
+    </section>
+
+    <!-- ===================================================== FEHLER -->
+    <section id="fehler">
+      <h2><span class="num">09</span>Fehlerbehebung</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Problem</th><th>Lösung</th></tr>
+          <tr><td>Neue Seiten oder Dateien fehlen</td><td><code>refresh</code> vor <code>restart ps-mdt</code> ausführen. Ohne <code>refresh</code> kennt der Server die neuen Dateien nicht.</td></tr>
+          <tr><td>Besetzung bleibt leer</td><td>In der Server-Konsole nach SQL-Fehlern suchen. Notfalls die Tabelle <code>mdt_assignments</code> aus <code>mdt.sql</code> von Hand anlegen.</td></tr>
+          <tr><td>Telefonnummer fehlt oder ist alt</td><td><code>lb-phone</code> muss vor <code>ps-mdt</code> starten. Mit <code>Config.PhoneSystem = 'qb'</code> zur QBCore-Nummer zurückkehren.</td></tr>
+          <tr><td>Einsätze fehlen im MDT oder es kommt kein Popup</td><td>Den Job in die passende Gruppe in <code>ps-dispatch/config.lua</code> eintragen und im Dienst sein (<code>Config.OnDutyOnly</code>). Danach <code>restart ps-dispatch</code>.</td></tr>
+          <tr><td>Marker auf Cayo Perico liegen daneben</td><td><code>CAYO_SHIFT_Y</code> in <code>ui/app.js</code> anpassen.</td></tr>
+          <tr><td>Andere Schrift als in der Vorschau</td><td>Die Schrift wird aus dem Internet geladen. Ohne Verbindung nutzt das MDT eine Ersatzschrift.</td></tr>
+          <tr><td>Regierung landet in einer anderen Oberfläche</td><td>Den Jobnamen sowohl in <code>Config.GovJobs</code> (<code>shared/config.lua</code>) als auch in <code>GovJobs</code> (<code>ui/app.js</code>) eintragen.</td></tr>
+          <tr><td>Taxi oder Mechaniker sehen das Polizei-MDT</td><td>Den Jobnamen in <code>Config.TaxiJobs</code> bzw. <code>Config.MechanicJobs</code> (<code>shared/config.lua</code>) und in <code>TaxiJobs</code> bzw. <code>MechanicJobs</code> (<code>ui/app.js</code>) eintragen.</td></tr>
+          <tr><td>Profilnotizen werden nicht pro Behörde getrennt</td><td>Beim Start stellt ps-mdt die Tabelle <code>mdt_data</code> automatisch um. Steht in der Konsole eine Fehlermeldung, den Befehl von Hand ausführen: <code>DELETE FROM mdt_data WHERE cid IS NULL; UPDATE mdt_data SET jobtype='police' WHERE jobtype IS NULL OR jobtype=''; ALTER TABLE mdt_data MODIFY cid VARCHAR(20) NOT NULL, MODIFY jobtype VARCHAR(25) NOT NULL DEFAULT 'police', DROP PRIMARY KEY, ADD PRIMARY KEY (cid, jobtype);</code></td></tr>
+          <tr><td>Feuerwehr sieht EMS-Daten</td><td>Der Job muss in <code>Config.FireJobs</code> stehen und darf nicht zusätzlich in <code>Config.AmbulanceJobs</code> stehen.</td></tr>
+          <tr><td>Vorstrafen werden nicht als Verbrechen erkannt</td><td>Nur Anklagen mit der Klasse „Verbrechen“ oder „Felony“ zählen. Klasse im Katalog prüfen.</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <footer>Erstellt von <a href="https://robertbox28.ch/">Robertbox28</a> · Grundlage: ps-mdt von Project Sloth · Stand November 2026</footer>
+  </main>
+</div>
+
+<script>
+  (function () {
+    var frame = document.getElementById("preview-frame");
+    var open = document.getElementById("preview-open");
+    var chips = document.querySelectorAll(".chip");
+    chips.forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        var hash = chip.getAttribute("data-hash");
+        chips.forEach(function (c) { c.setAttribute("aria-pressed", c === chip ? "true" : "false"); });
+        frame.src = "vorschau/index.html#" + hash;
+        open.href = "vorschau/index.html#" + hash;
+      });
+    });
+  })();
+</script>
+</body>
+</html>

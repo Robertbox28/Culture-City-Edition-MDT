@@ -1,0 +1,39 @@
+fx_version 'cerulean'
+game 'gta5'
+
+author 'Robertbox28 (https://robertbox28.ch/) – basierend auf ps-mdt von Flawws, Flakey, Idris and the Project Sloth team'
+description 'EchoRP MDT Rewrite for QBCore'
+version '2.5.0'
+
+lua54 'yes'
+
+shared_script 'shared/config.lua'
+
+server_scripts {
+    '@oxmysql/lib/MySQL.lua',
+    'server/utils.lua',
+    'server/dbm.lua',
+    'server/main.lua',
+    'server/assignments.lua'
+}
+client_scripts{
+    'client/main.lua',
+    'client/cl_impound.lua',
+    'client/cl_mugshot.lua',
+    'client/assignments.lua'
+} 
+
+ui_page 'ui/dashboard.html'
+
+files {
+    'ui/img/*.png',
+    'ui/img/*.webp',
+    'ui/dashboard.html',
+    'ui/app.js',
+    'ui/assignments.js',
+    'ui/sop-content.js',
+    'ui/sop.js',
+    'ui/style.css',
+    'ui/modern.css',
+    'ui/modern.js',
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leitstelle – Vorschau</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js" data-auto-replace-svg="nest"></script>
+<script src="app.js"></script>
+<style>
+  html, body { height: 100%; }
+  body { background: #2a3442 url(bg.jpg) center / cover no-repeat; }
+  .demo {
+    position: absolute; left: 2vh; bottom: 2vh; z-index: 5;
+    display: flex; flex-wrap: wrap; gap: .8vh; max-width: 60%;
+    padding: 1.2vh; border-radius: 1.1vh;
+    background: rgba(15, 20, 30, .88); border: 1px solid rgba(255,255,255,.08);
+    font-family: Inter, sans-serif; color: #e2e8f0; font-size: 1.3vh;
+  }
+  .demo strong { width: 100%; font-size: 1.2vh; letter-spacing: .1vh; text-transform: uppercase; color: rgba(226,232,240,.66); }
+  .demo button {
+    font: inherit; font-weight: 600; color: #fff; cursor: pointer;
+    padding: .7vh 1.2vh; border-radius: .8vh; border: 1px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.08);
+  }
+  .demo button:hover { background: rgba(255,255,255,.16); }
+  .demo button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="dispatch-container"><div class="dispatch-holder"></div></div>
+
+<div class="demo" role="group" aria-label="Testeinsatz senden">
+  <strong>Testeinsatz senden</strong>
+  <button type="button" data-k="shots">Schüsse (Polizei)</button>
+  <button type="button" data-k="call911">Notruf 911</button>
+  <button type="button" data-k="injured">Verletzte Person (EMS)</button>
+  <button type="button" data-k="explosion">Explosion (LSFD)</button>
+  <button type="button" data-k="officer">Beamter am Boden</button>
+  <button type="button" data-k="taxi">Taxi bestellt</button>
+  <button type="button" data-k="mech">Mechaniker angefordert</button>
+  <button type="button" data-k="response">Antwort der Leitstelle</button>
+</div>
+
+<script>
+let n = 41;
+const CALLS = {
+  shots: { department: 'police', data: { dispatchCode: '10-13', priority: 2, dispatchMessage: 'Schüsse aus Fahrzeug', firstStreet: 'Forum Dr, Strawberry', gender: 'Männlich', weapon: 'Klasse 2: Micro-SMG', model: 'Sultan RS', plate: '46EEK572', firstColor: 'Schwarz metallic', heading: 'Richtung Norden', automaticGunfire: true } },
+  call911: { department: 'police', data: { dispatchCode: '911', priority: 2, dispatchMessage: 'Eingehender Notruf', firstStreet: 'Vespucci Blvd, Legion Square', name: 'Karl Huber', number: '555-0142', information: 'Zwei Personen streiten sich vor dem Laden, einer hat ein Messer.' } },
+  injured: { department: 'ems', data: { dispatchCode: '10-69', priority: 2, dispatchMessage: 'Verletzte Person', firstStreet: 'Strawberry Ave, Strawberry', gender: 'Weiblich' } },
+  explosion: { department: 'fire', data: { dispatchCode: '10-80', priority: 2, dispatchMessage: 'Explosion gemeldet', firstStreet: 'Grove St, Davis' } },
+  officer: { department: 'police', data: { dispatchCode: '10-99', priority: 1, dispatchMessage: 'Beamter am Boden', firstStreet: 'Mission Row, Los Santos', name: 'Polizei - Lena Roth', callsign: '1-ADAM-12' } },
+  taxi: { department: 'taxi', data: { dispatchCode: 'TAXI', priority: 3, dispatchMessage: 'Taxi bestellt', firstStreet: 'Vespucci Blvd, Legion Square', name: 'Leon Roth', number: '555-0144', information: 'Zwei Personen zum Flughafen, mit Gepäck.' } },
+  mech: { department: 'mechanic', data: { dispatchCode: 'MECH', priority: 3, dispatchMessage: 'Mechaniker angefordert', firstStreet: 'Route 68, Harmony', name: 'Karl Huber', number: '555-0182', information: 'Reifen geplatzt, Ersatzrad fehlt.' } },
+  response: { department: 'response', timer: 10000, data: { dispatchCode: 'RSP', priority: 1, dispatchMessage: 'Antwort der Leitstelle', information: 'Einheit ist unterwegs, Eintreffen in etwa 3 Minuten.' } },
+};
+function send(k) {
+  const c = CALLS[k];
+  const data = Object.assign({ time: Date.now() }, c.data);
+  window.postMessage({ update: 'newCall', callID: ++n, timer: c.timer || 5000, isPolice: c.department === 'police', department: c.department, respondKey: 'E', data }, '*');
+}
+document.querySelectorAll('.demo button').forEach((b) => b.addEventListener('click', () => send(b.dataset.k)));
+// Laufender Funkverkehr für die Vorschau
+const ORDER = ['injured', 'taxi', 'explosion', 'call911', 'mech', 'shots', 'officer'];
+window.addEventListener('load', () => {
+  ORDER.forEach((k, i) => setTimeout(() => send(k), 300 + i * 700));
+  let i = 0;
+  setInterval(() => send(ORDER[i++ % ORDER.length]), 5000);
+});
+</script>
+</body>
+</html>
