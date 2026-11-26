@@ -1,4 +1,4 @@
-# Culture City MDT
+# Culture City Edition
 
 **Culture City Edition** von **ps-mdt** und **ps-dispatch** für FiveM (QBCore).
 
